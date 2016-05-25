@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>CreateChannel</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.teal-red.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+</head>
+<body>
+<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+    <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+
+    </header>
+    <div class="demo-ribbon"></div>
+    <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+            <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+
+                <h3 align="center">TS3 CreateChannel:</h3>
+
+                <div align="center">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="channel-name" required="" autofocus="">
+                        <label class="mdl-textfield__label" for="channel-name" id="label-1">Channel name</label>
+                    </div>
+                    <br>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="password" pattern=".{6,}" id="channel-password" required="" autofocus="">
+                        <label class="mdl-textfield__label" for="channel-password" id="label-2">Channel Password</label>
+                    </div>
+                    <br>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="password" pattern=".{6,}" id="password-again" required="">
+                        <label class="mdl-textfield__label" for="password-again" id="label-3">Password again</label>
+                    </div>
+                    <br>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="channel-user" required="">
+                        <label class="mdl-textfield__label" for="channel-user" id="label-4">TeamSpeak Username</label>
+                    </div>
+
+                    <div style="padding-bottom: 30px"></div>
+
+                    <div id="warning" style="display: none">
+
+                    </div>
+
+                    <br>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="register">
+                        Create
+                    </button>
+
+                    <h6 style="opacity: 0.7; padding-top: 20px" >Created by: @xdavidhu</h6>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<script>
+
+
+    $("#register").click(function () {
+
+        $warning = $("#warning");
+        $warning.hide();
+
+        if ($("#channel-password").val().localeCompare($("#password-again").val()) != 0) {
+            $warning.html("<h5 style='color: #FF0000'>Warning!</h5><p>Passwords do not match!</p>");
+            $warning.show();
+
+            return;
+        }
+
+        if ($("#channel-password").val() === "" || $("#channel-user").val() === "" || $("#channel-name").val() === "") {
+
+            $warning.html("<h5 style='color: #FF0000'>Warning!</h5><p>You need to fill all of the fields!</p>");
+            $warning.show();
+
+            return;
+        }
+        else {
+
+        }
+
+        $.get("api_createchannel.php",{channelname: $("#channel-name").val(), channelpass: $("#channel-password").val(), channeluser: $("#channel-user").val()},function (data) {
+            console.log(data);
+            console.log($("#channel-name").val() + " " + $("#channel-password").val() + " " + $("#channel-user").val());
+            if (data) {
+
+                if (data === "CHANNEL_ERROR"){
+                    $warning.html("<h5 style='color: #FF0000'>Warning!</h5><p>Channel with the same name already exists?</p>");
+                    $warning.show();
+
+                }
+                else if (data === "CONNECTION_ERROR" || data === "PRIVILEGE_ERROR" || data === "LOG_ERROR"){
+                    $warning.html("<h5 style='color: #FF0000'>Warning!</h5><p>Something went wrong. Error code: " + data + " </p>");
+                    $warning.show();
+                }
+                else {
+                    $warning.html("<h5 style='color: #00D000'>Success!</h5><p>Channel admin privilege key: " + data + "</p>");
+                    $warning.show();
+                }
+            }
+            else {
+                $warning.html("<h5 style='color: #FF0000'>Warning!</h5><p>Unknown error</p>");
+                $warning.show();
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>
