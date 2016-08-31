@@ -2,7 +2,6 @@
 
 /**
 	@author:xdavidhu
-	@website:ckdeveloper.tk
 */
 
 //Require the Planet Teamspeak's TS3 PHP Framework
