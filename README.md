@@ -1,4 +1,4 @@
-# CrateTS3Channel
+# CrateTS3Channel PHP
 
 <h4>This php file is capable to create channels on a TS3 server. It also generates a privilage key for the "Channel Admin" channel group. + there is a fully functional request site, for testing. (createchannel.html)</h4>
 
